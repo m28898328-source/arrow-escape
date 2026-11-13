@@ -45,7 +45,13 @@ jobs:
           echo '{"appId":"com.arrowescape.game","appName":"Arrow Escape","webDir":"dist"}' > capacitor.config.json
           npx cap add android
           npx cap sync android
-
+      - name: Generate App Icon
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          mkdir -p assets
+          cp "$GITHUB_WORKSPACE/icon.png" assets/icon.png
+          npm install --save-dev @capacitor/assets
+          npx capacitor-assets generate --android
       - name: Build APK
         working-directory: ${{ env.PROJECT_DIR }}/android
         run: chmod +x gradlew && ./gradlew assembleDebug
